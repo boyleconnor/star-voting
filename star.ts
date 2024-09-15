@@ -47,7 +47,7 @@ const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
 
 parse(fileContent, {
     delimiter: ',',
-    // columns: ["Voter ID", "Murphy", "Kelly", "Walsh", "O'Brien", "O'Doherty"],
+    cast: true,
     columns: true,
 }, (error, result) => {
     if (error) {
