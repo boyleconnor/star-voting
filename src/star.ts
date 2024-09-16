@@ -106,7 +106,7 @@ parse(fileContent, {
 
     const votes = result.map(
         (voteObject) => new Map(Object.entries(voteObject).filter(
-            ([key, value]) => key != "Voter ID"
+            ([key, _]) => key != "Voter ID"
         ))
     );
     getSTARWinner(votes);
