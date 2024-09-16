@@ -19,11 +19,39 @@ function getSTARWinner(votes: Map<string, number>[]) {
         }
     }
 
+    console.log("Candidate scores:")
     for (const candidate of scores.keys()) {
         console.log(`${candidate}: ${scores.get(candidate)}`);
     }
+    console.log("\n")
 
-    // TODO: get preferences for the top 2 candidates
+    let firstCandidate, secondCandidate;
+    for (const candidate of scores.keys()) {
+        if (firstCandidate === undefined) {
+            firstCandidate = candidate;
+        } else if (secondCandidate === undefined) {
+            secondCandidate = candidate;
+        } else if (<number>scores.get(candidate) >= <number>scores.get(firstCandidate)) {
+            secondCandidate = <string>firstCandidate;
+            firstCandidate = candidate;
+        } else if (<number>scores.get(candidate) >= <number>scores.get(secondCandidate)) {
+            secondCandidate = candidate;
+        }
+    }
+
+    // FIXME: figure out what to do in the case of score ties
+    for (const candidate of scores.keys()) {
+        if (candidate !== secondCandidate && scores.get(candidate) === scores.get(<string>secondCandidate)) {
+            throw new Error(
+                `At least one candidate (${candidate}; score=${scores.get(candidate)}) is tied with second-place \
+                candidate (${secondCandidate}; score=${scores.get(<string>secondCandidate)})`);
+        }
+    }
+
+    console.log("Top two candidates by score selected:")
+    for (const candidate of [firstCandidate, secondCandidate]) {
+        console.log(`  - ${candidate}; score=${scores.get(<string>candidate)}`)
+    }
 }
 
 
@@ -49,11 +77,17 @@ parse(fileContent, {
     delimiter: ',',
     cast: true,
     columns: true,
-}, (error, result) => {
+}, (error, result: object[]) => {
     if (error) {
         console.error(error);
     }
 
-    console.log("Result", result);
+    const votes = result.map(
+        (voteObject) => new Map(Object.entries(voteObject).filter(
+            ([key, value]) => key != "Voter ID"
+        ))
+    );
+    console.log("Votes", votes);
+    getSTARWinner(votes);
 });
 
