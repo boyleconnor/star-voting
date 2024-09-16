@@ -31,11 +31,18 @@ function getSTARWinner(votes: Map<string, number>[]) {
             firstCandidate = candidate;
         } else if (secondCandidate === undefined) {
             secondCandidate = candidate;
-        } else if (<number>scores.get(candidate) >= <number>scores.get(firstCandidate)) {
-            secondCandidate = <string>firstCandidate;
-            firstCandidate = candidate;
-        } else if (<number>scores.get(candidate) >= <number>scores.get(secondCandidate)) {
-            secondCandidate = candidate;
+        } else {
+            let score = <number>scores.get(candidate);
+            let firstCandidateScore = <number>scores.get(firstCandidate);
+            if (score >= firstCandidateScore) {
+                        secondCandidate = firstCandidate;
+                        firstCandidate = candidate;
+            } else {
+                let secondCandidateScore = <number>scores.get(secondCandidate);
+                if (score >= secondCandidateScore) {
+                    secondCandidate = candidate;
+                }
+            }
         }
     }
 
@@ -52,23 +59,38 @@ function getSTARWinner(votes: Map<string, number>[]) {
     for (const candidate of [firstCandidate, secondCandidate]) {
         console.log(`  - ${candidate}; score=${scores.get(<string>candidate)}`)
     }
+
+    let [prefersFirst, prefersSecond] = [0, 0];
+    for (const vote of votes) {
+        const firstScore = <number>vote.get(<string>firstCandidate)
+        const secondScore = <number>vote.get(<string>secondCandidate)
+        if (firstScore > secondScore) {
+            prefersFirst++;
+        } else if (firstScore < secondScore) {
+            prefersSecond++;
+        }
+    }
+    const noPreference = votes.length - (prefersFirst + prefersSecond);
+
+    let winner: string | undefined;
+    if (prefersFirst > prefersSecond) {
+        winner = firstCandidate;
+    } else if (prefersFirst < prefersSecond) {
+        winner = secondCandidate;
+    }
+
+    console.log(`Preferences:`)
+    for (const [candidate, prefersCount] of [[firstCandidate, prefersFirst], [secondCandidate, prefersSecond]]) {
+        console.log(`  - ${candidate} preferred by ${prefersCount} voters`);
+    }
+    console.log(`${noPreference} voters expressed no preference between ${firstCandidate} and ${secondCandidate}`)
+
+    if (winner !== undefined) {
+        console.log(`Winner: ${winner}`);
+    } else {
+        console.log(`Election was a tie between ${firstCandidate} and ${secondCandidate}`);
+    }
 }
-
-
-// let votes: Map<string, number>[] = [];
-// votes.push(new Map<string, number>({"O'"}))
-//
-// let vote = new Map<string, number>([
-//     ["Murphy", 1],
-//     ["O'Brien", 0],
-//     ["O'Doherty", 3],
-//     ["Kelly", 2],
-//     ["Walsh", 2],
-// ]);
-
-// for (const candidate of vote.keys()) {
-//     console.log(`${candidate}: ${vote.get(candidate)}`);
-// }
 
 const csvFilePath = path.resolve(__dirname, 'votes.csv');
 const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
@@ -87,7 +109,6 @@ parse(fileContent, {
             ([key, value]) => key != "Voter ID"
         ))
     );
-    console.log("Votes", votes);
     getSTARWinner(votes);
 });
 
