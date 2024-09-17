@@ -35,8 +35,8 @@ function getSTARWinner(votes: Map<string, number>[]) {
             let score = <number>scores.get(candidate);
             let firstCandidateScore = <number>scores.get(firstCandidate);
             if (score >= firstCandidateScore) {
-                        secondCandidate = firstCandidate;
-                        firstCandidate = candidate;
+                secondCandidate = firstCandidate;
+                firstCandidate = candidate;
             } else {
                 let secondCandidateScore = <number>scores.get(secondCandidate);
                 if (score >= secondCandidateScore) {
