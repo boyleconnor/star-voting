@@ -1,6 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import { parse } from 'csv-parse';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 
 function getSTARWinner(votes: Map<string, number>[]) {
@@ -92,7 +96,7 @@ function getSTARWinner(votes: Map<string, number>[]) {
     }
 }
 
-const csvFilePath = path.resolve(__dirname, 'votes.csv');
+const csvFilePath = path.resolve(__dirname, '..', 'votes.csv');
 const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
 
 parse(fileContent, {
