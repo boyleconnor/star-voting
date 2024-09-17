@@ -48,3 +48,12 @@ export default tseslint.config({
   },
 })
 ```
+
+
+## STAR Voting
+
+To run:
+
+```shell
+tsx src/star.ts
+```
