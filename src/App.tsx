@@ -4,7 +4,8 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [candidates, setCandidates] = useState(["Murphy", "O'Brien", "Walsh"]);
+  const [newCandidate, setNewCandidate] = useState("");
 
   return (
     <>
@@ -18,12 +19,20 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <input type="text" aria-label="new candidate" id="new-candidate" value={newCandidate} onChange={e => {
+          setNewCandidate(e.target.value)
+        }}/>
+        <button onClick={() => setCandidates(candidates.concat([newCandidate]))}>
+          Add candidate
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            {candidates.map((candidate, _) => <th>{candidate}</th>)}
+          </tr>
+          </thead>
+        </table>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
