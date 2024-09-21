@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import {getSTARWinner} from "./star.ts";
-const votes = [
+const INITIAL_VOTES = [
   new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0]]),
   new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1]]),
   new Map([["O'Brien", 1], ["Murphy", 0], ["Walsh", 3]]),
@@ -13,15 +13,32 @@ const votes = [
 
 function App() {
   const [candidates, setCandidates] = useState(["O'Brien", "Murphy", "Walsh"]);
+  const [votes, setVotes] = useState(INITIAL_VOTES);
+  const [newCandidate, setNewCandidate] = useState("");
+
+  const addVote = () => {
+    setVotes(votes.concat(new Map(candidates.map((candidate, _) => [candidate, 0]))));
+  }
+
+  const addCandidate = () => {
+    setCandidates(candidates.concat(newCandidate));
+    const newVotes = votes.map((vote, _) => {
+      const newVote = new Map(vote.entries());
+      newVote.set(newCandidate, 0);
+      return newVote;
+    })
+    setVotes(newVotes);
+    setNewCandidate("");
+  }
 
   return (
     <>
       <div>
         <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
+          <img src={viteLogo} className="logo" alt="Vite logo"/>
         </a>
         <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+          <img src={reactLogo} className="logo react" alt="React logo"/>
         </a>
       </div>
       <h1>Vite + React</h1>
@@ -42,9 +59,9 @@ function App() {
           </thead>
         </table>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={addVote}>Add vote</button>
+      <input type="text" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)}></input>
+      <button onClick={addCandidate}>Add candidate</button>
     </>
   )
 }
