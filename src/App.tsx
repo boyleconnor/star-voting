@@ -2,10 +2,17 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import {getSTARWinner} from "./star.ts";
+const votes = [
+  new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0]]),
+  new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1]]),
+  new Map([["O'Brien", 1], ["Murphy", 0], ["Walsh", 3]]),
+  new Map([["O'Brien", 2], ["Murphy", 3], ["Walsh", 2]]),
+  new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1]]),
+];
 
 function App() {
-  const [candidates, setCandidates] = useState(["Murphy", "O'Brien", "Walsh"]);
-  const [newCandidate, setNewCandidate] = useState("");
+  const [candidates, setCandidates] = useState(["O'Brien", "Murphy", "Walsh"]);
 
   return (
     <>
@@ -19,11 +26,8 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <input type="text" aria-label="new candidate" id="new-candidate" value={newCandidate} onChange={e => {
-          setNewCandidate(e.target.value)
-        }}/>
-        <button onClick={() => setCandidates(candidates.concat([newCandidate]))}>
-          Add candidate
+        <button onClick={() => getSTARWinner(votes)}>
+          Calculate winner
         </button>
         <table>
           <thead>
@@ -31,6 +35,10 @@ function App() {
             <th>ID</th>
             {candidates.map((candidate, _) => <th>{candidate}</th>)}
           </tr>
+          {votes.map((vote, i) => <tr>
+            <td>{i}</td>
+            {candidates.map((candidate, _) => <td>{vote.get(candidate)}</td>)}
+          </tr>)}
           </thead>
         </table>
       </div>
