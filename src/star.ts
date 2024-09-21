@@ -1,13 +1,4 @@
-import * as fs from "fs";
-import * as path from "path";
-import { parse } from 'csv-parse';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
-
-
-function getSTARWinner(votes: Map<string, number>[]) {
+export function getSTARWinner(votes: Map<string, number>[]) {
 
     // Find the top two candidates
     let scores = new Map<string, number>();
@@ -95,24 +86,3 @@ function getSTARWinner(votes: Map<string, number>[]) {
         console.log(`Election was a tie between ${firstCandidate} and ${secondCandidate}`);
     }
 }
-
-const csvFilePath = path.resolve(__dirname, '..', 'votes.csv');
-const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
-
-parse(fileContent, {
-    delimiter: ',',
-    cast: true,
-    columns: true,
-}, (error, result: object[]) => {
-    if (error) {
-        console.error(error);
-    }
-
-    const votes = result.map(
-        (voteObject) => new Map(Object.entries(voteObject).filter(
-            ([key, _]) => key != "Voter ID"
-        ))
-    );
-    getSTARWinner(votes);
-});
-
