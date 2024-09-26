@@ -41,6 +41,19 @@ function App() {
     setNewCandidate("");
   }
 
+  const setScore = (id: number, candidate: string, score: number) => {
+    const newVotes = votes.map((vote, _) => {
+      if (vote.id == id) {
+        const newScores = new Map(vote.scores.entries());
+        newScores.set(candidate, score);
+        return {id: vote.id, scores: newScores};
+      } else {
+        return {id: vote.id, scores: vote.scores};
+      }
+    })
+    setVotes(newVotes);
+  }
+
   return (
     <>
       <div>
@@ -64,7 +77,9 @@ function App() {
           </tr>
           {votes.map((vote, _) => <tr key={vote.id}>
             <td>{vote.id}</td>
-            {candidates.map((candidate, _) => <td key={candidate}>{vote.scores.get(candidate)}</td>)}
+            {candidates.map((candidate, _) => <td key={candidate}>
+              <input type="number" value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
+            </td>)}
           </tr>)}
           </thead>
         </table>
