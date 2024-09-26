@@ -19,6 +19,22 @@ const INITIAL_VOTES: Vote[] = [
 ];
 const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id, _, __) => Math.max(previousId, id)) + 1;
 
+// min & max scores (inclusive)
+const MIN_SCORE = 0;
+const MAX_SCORE = 5;
+
+const GRADIENT_LEFT = [0xff, 0x00, 0x00];
+const GRADIENT_RIGHT = [0x00, 0xff, 0x00];
+
+function getColor(score: number) {
+  const progress = (score - MIN_SCORE) / (MAX_SCORE - MIN_SCORE);
+  const colorCodes = GRADIENT_LEFT.map((code, i) => {
+    return Math.ceil((1 - progress) * code) +
+    Math.ceil(progress * GRADIENT_RIGHT[i]);
+  });
+  return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`;
+}
+
 function App() {
   const [candidates, setCandidates] = useState(["O'Brien", "Murphy", "Walsh"]);
   const [votes, setVotes] = useState(INITIAL_VOTES);
@@ -107,7 +123,7 @@ function App() {
           {votes.map((vote, _) => <tr key={vote.id}>
             <td>{vote.id}</td>
             {candidates.map((candidate, _) => <td key={candidate}>
-              <input type="number" value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
+              <input style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
             </td>)}
             <td><button onClick={() => {deleteVote(vote.id)}}>❌</button></td>
           </tr>)}
