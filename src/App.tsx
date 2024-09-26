@@ -54,6 +54,11 @@ function App() {
     setVotes(newVotes);
   }
 
+  const deleteVote = (id: number) => {
+    const newVotes = votes.filter((vote) => vote.id != id);
+    setVotes(newVotes);
+  }
+
   return (
     <>
       <div>
@@ -74,12 +79,14 @@ function App() {
           <tr>
             <th>ID</th>
             {candidates.map((candidate, _) => <th key={candidate}>{candidate}</th>)}
+            <th></th>
           </tr>
           {votes.map((vote, _) => <tr key={vote.id}>
             <td>{vote.id}</td>
             {candidates.map((candidate, _) => <td key={candidate}>
               <input type="number" value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
             </td>)}
+            <td><button onClick={() => {deleteVote(vote.id)}}>❌</button></td>
           </tr>)}
           </thead>
         </table>
