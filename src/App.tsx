@@ -31,6 +31,9 @@ function App() {
   }
 
   const addCandidate = () => {
+    if (candidates.includes(newCandidate)) {
+      return;
+    }
     setCandidates(candidates.concat(newCandidate));
     const newVotes = votes.map((vote, _) => {
       const newScores = new Map(vote.scores.entries());
