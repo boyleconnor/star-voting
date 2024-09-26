@@ -59,6 +59,22 @@ function App() {
     setVotes(newVotes);
   }
 
+  const deleteCandidate = (candidate: string) => {
+    const newVotes = votes
+        .map(({id, scores}) => { return {
+          id: id,
+          scores: Array.from(scores.entries())};
+        })
+        .map(({id, scores}) => { return {
+          id: id,
+          scores: new Map(scores.filter(([_candidate, _score]) => _candidate != candidate))
+        };});
+    setVotes(newVotes);
+
+    const newCandidates = candidates.filter(_candidate => _candidate != candidate);
+    setCandidates(newCandidates);
+  }
+
   return (
     <>
       <div>
@@ -76,6 +92,10 @@ function App() {
         </button>
         <table>
           <thead>
+          <tr>
+            <th></th>
+            {candidates.map((candidate, _) => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>❌</button></th>)}
+          </tr>
           <tr>
             <th>ID</th>
             {candidates.map((candidate, _) => <th key={candidate}>{candidate}</th>)}
