@@ -47,7 +47,8 @@ function App() {
   }
 
   const addCandidate = () => {
-    if (candidates.includes(newCandidate)) {
+    if (candidates.includes(newCandidate) || newCandidate === "") {
+      alert("New candidate name must be unique and non-empty");
       return;
     }
     setCandidates(candidates.concat(newCandidate));
