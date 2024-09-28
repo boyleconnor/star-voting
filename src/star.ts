@@ -24,7 +24,7 @@ export function getTopScorers(scores: Map<string, number>): [TopScoresResult, st
     if (scores.size < 2) {
         throw new Error(`Invalid number of candidates: ${scores.size}`);
     } else {
-        const sortedScores = Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore);
+        const sortedScores = Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore).reverse();
         const [_, highestScore] = sortedScores[0];
 
         // Tie for first
