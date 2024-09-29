@@ -11,12 +11,13 @@ interface Vote {
 }
 
 const INITIAL_VOTES: Vote[] = [
-  {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0]])},
-  {id: 2, scores: new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1]])},
-  {id: 3, scores: new Map([["O'Brien", 1], ["Murphy", 0], ["Walsh", 3]])},
-  {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 3], ["Walsh", 2]])},
-  {id: 5, scores: new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1]])},
+  {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0], ["Kelly", 1], ["O'Sullivan", 2]])},
+  {id: 2, scores: new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1], ["Kelly", 1], ["O'Sullivan", 3]])},
+  {id: 3, scores: new Map([["O'Brien", 1], ["Murphy", 0], ["Walsh", 3], ["Kelly", 2], ["O'Sullivan", 2]])},
+  {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 3], ["Walsh", 2], ["Kelly", 1], ["O'Sullivan", 3]])},
+  {id: 5, scores: new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1], ["Kelly", 2], ["O'Sullivan", 2]])},
 ];
+const INITIAL_CANDIDATES = Array.from(INITIAL_VOTES[0].scores.keys());
 const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id, _, __) => Math.max(previousId, id)) + 1;
 
 // min & max scores (inclusive)
@@ -36,7 +37,7 @@ function getColor(score: number) {
 }
 
 function App() {
-  const [candidates, setCandidates] = useState(["O'Brien", "Murphy", "Walsh"]);
+  const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [votes, setVotes] = useState(INITIAL_VOTES);
   const [newCandidate, setNewCandidate] = useState("");
   const [nextId, setNextId] = useState(INITIAL_NEXT_ID);
