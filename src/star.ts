@@ -50,6 +50,28 @@ export function getTopScorers(sortedScores: [string, number][]): [TopScoresResul
     }
 }
 
+export function getPreferences(firstCandidate: string, secondCandidate: string, votes: Map<string, number>[])  {
+    let [prefersFirst, prefersSecond] = [0, 0];
+    for (const vote of votes) {
+        const firstScore = <number>vote.get(<string>firstCandidate)
+        const secondScore = <number>vote.get(<string>secondCandidate)
+        if (firstScore > secondScore) {
+            prefersFirst++;
+        } else if (firstScore < secondScore) {
+            prefersSecond++;
+        }
+    }
+    const noPreference = votes.length - (prefersFirst + prefersSecond);
+
+    console.log(`Preferences:`)
+    for (const [candidate, prefersCount] of [[firstCandidate, prefersFirst], [secondCandidate, prefersSecond]]) {
+        console.log(`  - ${candidate} preferred by ${prefersCount} voters`);
+    }
+    console.log(`${noPreference} voters expressed no preference between ${firstCandidate} and ${secondCandidate}`)
+
+    return {prefersFirst, prefersSecond, noPreference};
+}
+
 export function getSTARWinner(votes: Map<string, number>[]) {
 
     let scores = getScores(votes);
@@ -70,42 +92,7 @@ export function getSTARWinner(votes: Map<string, number>[]) {
             `Logic not yet implemented for result: ${topScoreResult.toString()}`
         );
     }
-
-    console.log("Top two candidates by score selected:")
-    for (const candidate of topCandidates) {
-        console.log(`  - ${candidate}; score=${scores.get(candidate)}`)
-    }
-
-    // FIXME: Make this work with more than two candidates
     const [firstCandidate, secondCandidate] = topCandidates;
-    let [prefersFirst, prefersSecond] = [0, 0];
-    for (const vote of votes) {
-        const firstScore = <number>vote.get(<string>firstCandidate)
-        const secondScore = <number>vote.get(<string>secondCandidate)
-        if (firstScore > secondScore) {
-            prefersFirst++;
-        } else if (firstScore < secondScore) {
-            prefersSecond++;
-        }
-    }
-    const noPreference = votes.length - (prefersFirst + prefersSecond);
-
-    let winner: string | undefined;
-    if (prefersFirst > prefersSecond) {
-        winner = firstCandidate;
-    } else if (prefersFirst < prefersSecond) {
-        winner = secondCandidate;
-    }
-
-    console.log(`Preferences:`)
-    for (const [candidate, prefersCount] of [[firstCandidate, prefersFirst], [secondCandidate, prefersSecond]]) {
-        console.log(`  - ${candidate} preferred by ${prefersCount} voters`);
-    }
-    console.log(`${noPreference} voters expressed no preference between ${firstCandidate} and ${secondCandidate}`)
-
-    if (winner !== undefined) {
-        console.log(`Winner: ${winner}`);
-    } else {
-        console.log(`Election was a tie between ${firstCandidate} and ${secondCandidate}`);
-    }
+    const preferences = getPreferences(firstCandidate, secondCandidate, votes);
+    console.log(preferences);
 }

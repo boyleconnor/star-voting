@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {getScores, getSTARWinner, getTopScorers, sortScores} from "./star.ts";
+import {getPreferences, getScores, getSTARWinner, getTopScorers, sortScores, TopScoresResult} from "./star.ts";
 
 
 interface Vote {
@@ -13,7 +13,7 @@ interface Vote {
 const INITIAL_VOTES: Vote[] = [
   {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0], ["Kelly", 1], ["O'Sullivan", 2]])},
   {id: 2, scores: new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1], ["Kelly", 1], ["O'Sullivan", 3]])},
-  {id: 3, scores: new Map([["O'Brien", 1], ["Murphy", 0], ["Walsh", 3], ["Kelly", 2], ["O'Sullivan", 2]])},
+  {id: 3, scores: new Map([["O'Brien", 2], ["Murphy", 0], ["Walsh", 3], ["Kelly", 2], ["O'Sullivan", 2]])},
   {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 3], ["Walsh", 2], ["Kelly", 1], ["O'Sullivan", 3]])},
   {id: 5, scores: new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1], ["Kelly", 2], ["O'Sullivan", 2]])},
 ];
@@ -100,6 +100,20 @@ function App() {
   const sortedScores = sortScores(totalScores);
   const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
+  // FIXME: We just assume there are no ties and run this on the first two scorers in the sorted list
+  let [firstCandidate, secondCandidate] = topCandidates.splice(0, 2)
+  const preferences = getPreferences(firstCandidate, secondCandidate, votes.map(vote => vote.scores));
+
+  // FIXME: We should display an explanation/reason for victory or tie
+  let winner = null;
+  if (preferences.prefersFirst > preferences.prefersSecond) {
+    winner = firstCandidate;
+  } else if (preferences.prefersFirst < preferences.prefersSecond) {
+    winner = secondCandidate;
+  } else if (topScoreResult !== TopScoresResult.TieForFirst) {
+    winner = firstCandidate;
+  }
+
   return (
     <>
       <div>
@@ -139,8 +153,9 @@ function App() {
       <button onClick={addVote}>Add vote</button>
       <input type="text" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)}></input>
       <button onClick={addCandidate}>Add candidate</button>
+
+      <h2>Score round</h2>
       <table>
-        <caption>Top scorers (result={topScoreResult})</caption>
         <thead><tr>
           <th>Candidate</th>
           <th>Total score</th>
@@ -152,6 +167,32 @@ function App() {
           </tr>)}
         </tbody>
       </table>
+
+      <h2>Run-off Round</h2>
+      {(topScoreResult === TopScoresResult.NoTie && <>
+        <table>
+          <thead>
+          <tr>
+            <th colSpan={3}>How many voters prefer:</th>
+          </tr>
+          <tr>
+            <th>{firstCandidate}</th>
+            <th><i>neither</i></th>
+            <th>{secondCandidate}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{preferences.prefersFirst}</td>
+            <td>{preferences.noPreference}</td>
+            <td>{preferences.prefersSecond}</td>
+          </tr>
+          </tbody>
+        </table>
+        <p>Winner: {winner !== null ? winner: <i>Tie</i>}</p>
+      </>) || <>
+        <i>Breaking ties in the scoring round is not yet supported in this app.</i>
+      </>}
     </>
   )
 }
