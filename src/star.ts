@@ -5,7 +5,7 @@ export enum TopScoresResult {
 }
 
 export function getScores(votes: Map<string, number>[]) {
-    let scores = new Map<string, number>();
+    const scores = new Map<string, number>();
     for (const vote of votes) {
         for (const candidate of vote.keys()) {
             const score = vote.get(candidate);
@@ -21,18 +21,18 @@ export function getScores(votes: Map<string, number>[]) {
 }
 
 export function sortScores(scores: Map<string, number>) {
-    return Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore).reverse();
+    return Array.from(scores.entries()).sort(([, firstScore], [, secondScore]) => firstScore - secondScore).reverse();
 }
 
 export function getTopScorers(sortedScores: [string, number][]): [TopScoresResult, string[]] {
     if (sortedScores.length < 2) {
         throw new Error(`Invalid number of candidates: ${sortedScores.length}`);
     } else {
-        const [_, highestScore] = sortedScores[0];
+        const [, highestScore] = sortedScores[0];
 
         if (sortedScores[0][1] == sortedScores[1][1]) {
             // Tie for first
-            return [TopScoresResult.TieForFirst, sortedScores.filter(([_, score]) => score == highestScore).map(([candidate, _]) => candidate)]
+            return [TopScoresResult.TieForFirst, sortedScores.filter(([, score]) => score == highestScore).map(([candidate,]) => candidate)]
         } else if (sortedScores.length >= 3 && sortedScores[1][1] == sortedScores[2][1]) {
             // Tie for second
             const secondHighestScore = sortedScores[1][1];
@@ -42,10 +42,10 @@ export function getTopScorers(sortedScores: [string, number][]): [TopScoresResul
                     break;
                 }
             }
-            return [TopScoresResult.TieForSecond, sortedScores.slice(0, i).map(([candidate, _]) => candidate)];
+            return [TopScoresResult.TieForSecond, sortedScores.slice(0, i).map(([candidate,]) => candidate)];
         } else {
             // No tie
-            return [TopScoresResult.NoTie, sortedScores.slice(0, 2).map(([candidate, _]) => candidate)];
+            return [TopScoresResult.NoTie, sortedScores.slice(0, 2).map(([candidate,]) => candidate)];
         }
     }
 }
@@ -74,7 +74,7 @@ export function getPreferences(firstCandidate: string, secondCandidate: string, 
 
 export function getSTARWinner(votes: Map<string, number>[]) {
 
-    let scores = getScores(votes);
+    const scores = getScores(votes);
 
     console.log("Candidate scores:")
     for (const candidate of scores.keys()) {
@@ -84,7 +84,7 @@ export function getSTARWinner(votes: Map<string, number>[]) {
 
     // Find the top two candidates
     const sortedScores: [string, number][] = sortScores(scores);
-    let [topScoreResult, topCandidates] = getTopScorers(sortedScores);
+    const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
     // FIXME: figure out what to do in the case of score ties
     if (topScoreResult !== TopScoresResult.NoTie) {

@@ -16,7 +16,7 @@ const INITIAL_VOTES: Vote[] = [
   {id: 5, scores: new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1], ["Kelly", 2], ["O'Sullivan", 2]])},
 ];
 const INITIAL_CANDIDATES = Array.from(INITIAL_VOTES[0].scores.keys());
-const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id, _, __) => Math.max(previousId, id)) + 1;
+const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id) => Math.max(previousId, id)) + 1;
 
 // min & max scores (inclusive)
 const MIN_SCORE = 0;
@@ -41,7 +41,7 @@ function App() {
   const [nextId, setNextId] = useState(INITIAL_NEXT_ID);
 
   const addVote = () => {
-    setVotes(votes.concat({id: nextId, scores: new Map(candidates.map((candidate, _) => [candidate, 0]))}));
+    setVotes(votes.concat({id: nextId, scores: new Map(candidates.map(candidate => [candidate, 0]))}));
     setNextId(nextId + 1);
   }
 
@@ -51,7 +51,7 @@ function App() {
       return;
     }
     setCandidates(candidates.concat(newCandidate));
-    const newVotes = votes.map((vote, _) => {
+    const newVotes = votes.map(vote => {
       const newScores = new Map(vote.scores.entries());
       newScores.set(newCandidate, 0);
       return {id: vote.id, scores: newScores};
@@ -61,7 +61,7 @@ function App() {
   }
 
   const setScore = (id: number, candidate: string, score: number) => {
-    const newVotes = votes.map((vote, _) => {
+    const newVotes = votes.map(vote => {
       if (vote.id == id) {
         const newScores = new Map(vote.scores.entries());
         newScores.set(candidate, score);
@@ -86,7 +86,7 @@ function App() {
         })
         .map(({id, scores}) => { return {
           id: id,
-          scores: new Map(scores.filter(([_candidate, _score]) => _candidate != candidate))
+          scores: new Map(scores.filter(([_candidate,]) => _candidate != candidate))
         };});
     setVotes(newVotes);
 
@@ -99,7 +99,7 @@ function App() {
   const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
   // FIXME: We just assume there are no ties and run this on the first two scorers in the sorted list
-  let [firstCandidate, secondCandidate] = topCandidates.splice(0, 2)
+  const [firstCandidate, secondCandidate] = topCandidates.splice(0, 2)
   const preferences = getPreferences(firstCandidate, secondCandidate, votes.map(vote => vote.scores));
 
   // FIXME: We should display an explanation/reason for victory or tie
@@ -123,16 +123,16 @@ function App() {
           <thead>
           <tr>
             <th></th>
-            {candidates.map((candidate, _) => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>❌</button></th>)}
+            {candidates.map(candidate => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>❌</button></th>)}
           </tr>
           <tr>
             <th>ID</th>
-            {candidates.map((candidate, _) => <th key={candidate}>{candidate}</th>)}
+            {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
             <th></th>
           </tr>
-          {votes.map((vote, _) => <tr key={vote.id}>
+          {votes.map(vote => <tr key={vote.id}>
             <td>{vote.id}</td>
-            {candidates.map((candidate, _) => <td key={candidate}>
+            {candidates.map(candidate => <td key={candidate}>
               <input style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
             </td>)}
             <td><button onClick={() => {deleteVote(vote.id)}}>❌</button></td>
