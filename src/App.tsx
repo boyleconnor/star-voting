@@ -98,7 +98,7 @@ function App() {
 
   const totalScores = getScores(votes.map(vote => vote.scores));
   const sortedScores = sortScores(totalScores);
-  const [topScoreResult, topScores] = getTopScorers(sortedScores);
+  const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
   return (
     <>
@@ -146,9 +146,9 @@ function App() {
           <th>Total score</th>
         </tr></thead>
         <tbody>
-          {topScores.map(candidate => <tr>
-            <td>{candidate}</td>
-            <td>{totalScores.get(candidate)}</td>
+          {sortedScores.map(([candidate, score]) => <tr>
+            <td style={{backgroundColor: (topCandidates.includes(candidate) && "#EEEEEE") || "#FFFFFF"}}>{candidate}</td>
+            <td>{score}</td>
           </tr>)}
         </tbody>
       </table>
