@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {getScores, getSTARWinner, getTopScorers} from "./star.ts";
+import {getScores, getSTARWinner, getTopScorers, sortScores} from "./star.ts";
 
 
 interface Vote {
@@ -97,7 +97,8 @@ function App() {
   }
 
   const totalScores = getScores(votes.map(vote => vote.scores));
-  const [topScoreResult, topScores] = getTopScorers(totalScores);
+  const sortedScores = sortScores(totalScores);
+  const [topScoreResult, topScores] = getTopScorers(sortedScores);
 
   return (
     <>

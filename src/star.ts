@@ -20,11 +20,14 @@ export function getScores(votes: Map<string, number>[]) {
     return scores;
 }
 
-export function getTopScorers(scores: Map<string, number>): [TopScoresResult, string[]] {
-    if (scores.size < 2) {
-        throw new Error(`Invalid number of candidates: ${scores.size}`);
+export function sortScores(scores: Map<string, number>) {
+    return Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore).reverse();
+}
+
+export function getTopScorers(sortedScores: [string, number][]): [TopScoresResult, string[]] {
+    if (sortedScores.length < 2) {
+        throw new Error(`Invalid number of candidates: ${sortedScores.length}`);
     } else {
-        const sortedScores = Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore).reverse();
         const [_, highestScore] = sortedScores[0];
 
         if (sortedScores[0][1] == sortedScores[1][1]) {
@@ -58,7 +61,8 @@ export function getSTARWinner(votes: Map<string, number>[]) {
     console.log("\n")
 
     // Find the top two candidates
-    let [topScoreResult, topCandidates] = getTopScorers(scores);
+    const sortedScores: [string, number][] = sortScores(scores);
+    let [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
     // FIXME: figure out what to do in the case of score ties
     if (topScoreResult !== TopScoresResult.NoTie) {
