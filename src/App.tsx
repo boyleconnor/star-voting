@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {getSTARWinner} from "./star.ts";
+import {getScores, getSTARWinner, getTopScorers} from "./star.ts";
 
 
 interface Vote {
@@ -95,6 +95,9 @@ function App() {
     setCandidates(newCandidates);
   }
 
+  const totalScores = getScores(votes.map(vote => vote.scores));
+  const [topScoreResult, topScores] = getTopScorers(totalScores);
+
   return (
     <>
       <div>
@@ -134,6 +137,19 @@ function App() {
       <button onClick={addVote}>Add vote</button>
       <input type="text" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)}></input>
       <button onClick={addCandidate}>Add candidate</button>
+      <table>
+        <caption>Top scorers (result={topScoreResult})</caption>
+        <thead><tr>
+          <th>Candidate</th>
+          <th>Total score</th>
+        </tr></thead>
+        <tbody>
+          {topScores.map(candidate => <tr>
+            <td>{candidate}</td>
+            <td>{totalScores.get(candidate)}</td>
+          </tr>)}
+        </tbody>
+      </table>
     </>
   )
 }
