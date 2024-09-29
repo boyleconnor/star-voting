@@ -27,21 +27,22 @@ export function getTopScorers(scores: Map<string, number>): [TopScoresResult, st
         const sortedScores = Array.from(scores.entries()).sort(([_firstCandidate, firstScore], [_secondCandidate, secondScore]) => firstScore - secondScore).reverse();
         const [_, highestScore] = sortedScores[0];
 
-        // Tie for first
-        if (sortedScores.slice(1).map((_, score) => score).includes(highestScore)) {
-            const endOfTiedScores = sortedScores.findIndex((_, score) => score < highestScore);
-            return [TopScoresResult.TieForFirst, sortedScores.slice(0, endOfTiedScores).map(([candidate, _]) => candidate)];
-        } else {
+        if (sortedScores[0][1] == sortedScores[1][1]) {
+            // Tie for first
+            return [TopScoresResult.TieForFirst, sortedScores.filter(([_, score]) => score == highestScore).map(([candidate, _]) => candidate)]
+        } else if (sortedScores.length >= 3 && sortedScores[1][1] == sortedScores[2][1]) {
             // Tie for second
-            const [_, secondHighestScore] = sortedScores[1];
-            if (sortedScores.slice(2).map((_, score) => score).includes(secondHighestScore)) {
-                const endOfTiedScores = sortedScores.findIndex((_, score) => score < highestScore);
-                return [TopScoresResult.TieForSecond, sortedScores.slice(0, endOfTiedScores).map(([candidate, _]) => candidate)];
+            const secondHighestScore = sortedScores[1][1];
+            let i
+            for (i = 2; i < sortedScores.length; i++) {
+                if (sortedScores[i][1] < secondHighestScore) {
+                    break;
+                }
             }
-            // No ties
-            else {
-                return [TopScoresResult.NoTie, sortedScores.slice(0, 2).map(([candidate, _]) => candidate)];
-            }
+            return [TopScoresResult.TieForSecond, sortedScores.slice(0, i).map(([candidate, _]) => candidate)];
+        } else {
+            // No tie
+            return [TopScoresResult.NoTie, sortedScores.slice(0, 2).map(([candidate, _]) => candidate)];
         }
     }
 }
