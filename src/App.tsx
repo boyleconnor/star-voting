@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import './App.css'
-import {getPreferences, getScores, getSTARWinner, getTopScorers, sortScores, TopScoresResult} from "./star.ts";
+import {getPreferences, getScores, getSTARWinner, getTopScorers, sortScores} from "./star.ts";
 
 
 interface Vote {
@@ -96,7 +96,7 @@ function App() {
 
   const totalScores = getScores(votes.map(vote => vote.scores));
   const sortedScores = sortScores(totalScores);
-  const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
+  const topCandidates = getTopScorers(sortedScores);
 
   // FIXME: We just assume there are no ties and run this on the first two scorers in the sorted list
   const [firstCandidate, secondCandidate] = topCandidates.slice(0, 2)
@@ -108,7 +108,7 @@ function App() {
     winner = firstCandidate;
   } else if (preferences.prefersFirst < preferences.prefersSecond) {
     winner = secondCandidate;
-  } else if (topScoreResult !== TopScoresResult.TieForFirst) {
+  } else if (totalScores.get(firstCandidate) !== totalScores.get(secondCandidate)) {
     winner = firstCandidate;
   }
 
@@ -165,7 +165,7 @@ function App() {
       </table>
 
       <h2>Run-off Round</h2>
-      {(topScoreResult === TopScoresResult.NoTie && <>
+      {(topCandidates.length == 2 && <>
         <table>
           <thead>
           <tr>
