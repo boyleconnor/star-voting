@@ -123,24 +123,30 @@ function App() {
           <thead>
           <tr>
             <th></th>
-            {candidates.map(candidate => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>❌</button></th>)}
+            {candidates.map(candidate => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>✖</button></th>)}
           </tr>
           <tr>
             <th>ID</th>
             {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
             <th></th>
           </tr>
+          </thead>
+          <tbody>
           {votes.map(vote => <tr key={vote.id}>
             <td>{vote.id}</td>
             {candidates.map(candidate => <td key={candidate}>
               <input style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
             </td>)}
-            <td><button onClick={() => {deleteVote(vote.id)}}>❌</button></td>
+            <td><button onClick={() => {deleteVote(vote.id)}}>✖</button></td>
           </tr>)}
-          </thead>
+          <tr>
+            <td></td>
+            {candidates.map(candidate => <td key={candidate}></td>)}
+            <td><button onClick={addVote} style={{ fontSize: 18 }}><b>+</b></button></td>
+          </tr>
+          </tbody>
         </table>
       </div>
-      <button onClick={addVote}>Add vote</button>
       <input type="text" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)}></input>
       <button onClick={addCandidate}>Add candidate</button>
 
