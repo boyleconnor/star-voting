@@ -99,7 +99,7 @@ function App() {
   const [topScoreResult, topCandidates] = getTopScorers(sortedScores);
 
   // FIXME: We just assume there are no ties and run this on the first two scorers in the sorted list
-  const [firstCandidate, secondCandidate] = topCandidates.splice(0, 2)
+  const [firstCandidate, secondCandidate] = topCandidates.slice(0, 2)
   const preferences = getPreferences(firstCandidate, secondCandidate, votes.map(vote => vote.scores));
 
   // FIXME: We should display an explanation/reason for victory or tie
