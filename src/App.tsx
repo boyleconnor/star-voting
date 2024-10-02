@@ -9,11 +9,11 @@ interface Vote {
 }
 
 const INITIAL_VOTES: Vote[] = [
-  {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 0], ["Kelly", 1], ["O'Sullivan", 2]])},
-  {id: 2, scores: new Map([["O'Brien", 3], ["Murphy", 2], ["Walsh", 1], ["Kelly", 1], ["O'Sullivan", 3]])},
-  {id: 3, scores: new Map([["O'Brien", 2], ["Murphy", 0], ["Walsh", 3], ["Kelly", 2], ["O'Sullivan", 2]])},
-  {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 3], ["Walsh", 2], ["Kelly", 1], ["O'Sullivan", 3]])},
-  {id: 5, scores: new Map([["O'Brien", 3], ["Murphy", 0], ["Walsh", 1], ["Kelly", 2], ["O'Sullivan", 2]])},
+  {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 4], ["Walsh", 0], ["Kelly", 1]])},
+  {id: 2, scores: new Map([["O'Brien", 5], ["Murphy", 2], ["Walsh", 1], ["Kelly", 0]])},
+  {id: 3, scores: new Map([["O'Brien", 2], ["Murphy", 0], ["Walsh", 5], ["Kelly", 2]])},
+  {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 5], ["Walsh", 2], ["Kelly", 0]])},
+  {id: 5, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 1], ["Kelly", 0]])},
 ];
 const INITIAL_CANDIDATES = Array.from(INITIAL_VOTES[0].scores.keys());
 const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id) => Math.max(previousId, id)) + 1;
