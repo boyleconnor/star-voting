@@ -34,6 +34,9 @@ function getColor(score: number) {
   return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`;
 }
 
+const FIRST_CAN_BG_COLOR = "cyan";
+const SECOND_CAN_BG_COLOR = "yellow";
+
 function App() {
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [votes, setVotes] = useState(INITIAL_VOTES);
@@ -176,7 +179,7 @@ function App() {
         </tr></thead>
         <tbody>
           {sortedScores.map(([candidate, score]) => <tr>
-            <td style={{backgroundColor: (topCandidates.includes(candidate) && "#EEEEEE") || "#FFFFFF"}}>{candidate}</td>
+            <td style={{backgroundColor: (candidate == firstCandidate && FIRST_CAN_BG_COLOR) || (candidate == secondCandidate && SECOND_CAN_BG_COLOR) || "gray"}}>{candidate}</td>
             <td>{score}</td>
           </tr>)}
         </tbody>
@@ -185,7 +188,27 @@ function App() {
       <h2>Run-off Round</h2>
       {(topCandidates.length == 2 && <>
         <table>
-          <thead>
+          <thead><tr>
+            <th>ID</th>
+            <th>{firstCandidate}</th>
+            <th>{secondCandidate}</th>
+            <th>Preference</th>
+          </tr></thead>
+          <tbody>
+          {votes.map(vote => <tr>
+            <td>{vote.id}</td>
+            <td style={{ backgroundColor: getColor(vote.scores.get(firstCandidate)) }}>{vote.scores.get(firstCandidate)}</td>
+            <td style={{ backgroundColor: getColor(vote.scores.get(secondCandidate)) }}>{vote.scores.get(secondCandidate)}</td>
+            {
+              (vote.scores.get(firstCandidate) > vote.scores.get(secondCandidate) && <td style={{ backgroundColor: FIRST_CAN_BG_COLOR }}>{firstCandidate}</td>) ||
+              (vote.scores.get(firstCandidate) < vote.scores.get(secondCandidate) && <td style={{ backgroundColor: SECOND_CAN_BG_COLOR }}>{secondCandidate}</td>) ||
+              <td style={{ backgroundColor: "gray"}}><i>neither</i></td>
+            }
+          </tr>)}
+          </tbody>
+        </table>
+        <table>
+        <thead>
           <tr>
             <th colSpan={3}>How many voters prefer:</th>
           </tr>
