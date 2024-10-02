@@ -169,7 +169,7 @@ function App() {
       <h2>Score round</h2>
       {topCandidates.length == 2 && (<p>
         <b>{firstCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>)
-        and <b>{secondCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>) received the two highest total scores.
+        and <b>{secondCandidate}</b> (score: <b>{totalScores.get(secondCandidate)}</b>) received the two highest total scores.
         The winner will be decided by voters' preferences between these candidates.
       </p>)}
       <table>
