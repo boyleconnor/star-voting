@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import './App.css'
-import {getPreferences, getScores, getSTARWinner, getTopScorers, sortScores} from "./star.ts";
+import {getPreferences, getScores, getTopScorers, sortScores} from "./star.ts";
 
 
 interface Vote {
@@ -116,9 +116,22 @@ function App() {
     <>
       <h1>STAR Voting</h1>
       <div className="card">
-        <button onClick={() => getSTARWinner(votes.map(vote => vote.scores))}>
-          Calculate winner
-        </button>
+        <h2>Ballots</h2>
+        <p>
+          In a STAR election, each voter assigns a score to every candidate (customarily, on the inclusive range of zero
+          to five). The winner of the election will be decided based on a combination of the summed total scores that
+          each candidate wins, as well as each voter's implicit preferences between the top-scoring candidates, which
+          can be inferred by their relative scoring of the candidates.
+        </p>
+        <p>
+          Voters can assign any score within the allowed range to any number of candidates; voters can even assign
+          the same score (e.g. 0 or 3) to every candidate; however, this would be pointless and equivalent to not
+          voting.
+        </p>
+        <p>
+          Voters are rewarded for giving their most-preferred candidates high scores and giving their least-preferred
+          candidates low scores.
+        </p>
         <table>
           <thead>
           <tr>
@@ -151,6 +164,11 @@ function App() {
       <button onClick={addCandidate}>Add candidate</button>
 
       <h2>Score round</h2>
+      {topCandidates.length == 2 && (<p>
+        <b>{firstCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>)
+        and <b>{secondCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>) received the two highest total scores.
+        The winner will be decided by voters' preferences between these candidates.
+      </p>)}
       <table>
         <thead><tr>
           <th>Candidate</th>
