@@ -11,7 +11,7 @@ interface Vote {
 const INITIAL_VOTES: Vote[] = [
   {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 4], ["Walsh", 0], ["Kelly", 1]])},
   {id: 2, scores: new Map([["O'Brien", 5], ["Murphy", 2], ["Walsh", 1], ["Kelly", 0]])},
-  {id: 3, scores: new Map([["O'Brien", 2], ["Murphy", 0], ["Walsh", 5], ["Kelly", 2]])},
+  {id: 3, scores: new Map([["O'Brien", 0], ["Murphy", 0], ["Walsh", 5], ["Kelly", 2]])},
   {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 5], ["Walsh", 2], ["Kelly", 0]])},
   {id: 5, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 1], ["Kelly", 0]])},
 ];
