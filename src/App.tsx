@@ -34,8 +34,8 @@ function getColor(score: number) {
   return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`;
 }
 
-const FIRST_CAN_BG_COLOR = "cyan";
-const SECOND_CAN_BG_COLOR = "yellow";
+const FIRST_CAN_BG_COLOR = "cyan"; // Color for first place (by score) candidate
+const SECOND_CAN_BG_COLOR = "yellow"; // Color for second place (by score) candidate
 
 function App() {
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
