@@ -139,7 +139,7 @@ function App() {
           <thead>
           <tr>
             <th></th>
-            {candidates.map(candidate => <th key={candidate}><button onClick={() => deleteCandidate(candidate)}>✖</button></th>)}
+            {candidates.map(candidate => <th key={candidate} className="candidate-delete" onClick={() => deleteCandidate(candidate)}>✖</th>)}
           </tr>
           <tr>
             <th>ID</th>
@@ -156,7 +156,7 @@ function App() {
             <td className="vote-delete" onClick={() => {deleteVote(vote.id)}}>✖</td>
           </tr>)}
           <tr>
-            <td colSpan={2+candidates.length}><button onClick={addVote} style={{ fontSize: 18 }}><b>+</b></button></td>
+            <td colSpan={2+candidates.length} className="vote-add" onClick={addVote} style={{ fontSize: 18 }}><b>+</b></td>
           </tr>
           </tbody>
         </table>

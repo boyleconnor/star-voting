@@ -60,11 +60,26 @@ td.ballot {
 }
 
 td.vote-delete {
-  min-width: 30px;
-  text-align: center;
+  min-width: 50px;
+  padding: 0;
+  align-content: center;
 }
 
 td.vote-delete:hover {
+  background-color: black;
+  color: white;
+}
+
+td.vote-add:hover {
+  background-color: black;
+  color: white;
+}
+
+th.candidate {
+  min-width: 100px;
+}
+
+th.candidate-delete:hover {
   background-color: black;
   color: white;
 }
