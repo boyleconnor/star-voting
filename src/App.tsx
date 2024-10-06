@@ -135,7 +135,7 @@ function App() {
           Voters are rewarded for giving their most-preferred candidates high scores and giving their least-preferred
           candidates low scores.
         </p>
-        <table>
+        <table className="ballots">
           <thead>
           <tr>
             <th></th>
@@ -143,22 +143,20 @@ function App() {
           </tr>
           <tr>
             <th>ID</th>
-            {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
+            {candidates.map(candidate => <th className="candidate" key={candidate}>{candidate}</th>)}
             <th></th>
           </tr>
           </thead>
           <tbody>
-          {votes.map(vote => <tr key={vote.id}>
-            <td>{vote.id}</td>
-            {candidates.map(candidate => <td key={candidate}>
-              <input style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
+          {votes.map(vote => <tr className="ballot" key={vote.id}>
+            <td className="ballot">{vote.id}</td>
+            {candidates.map(candidate => <td className="ballot" key={candidate}>
+              <input className="score" style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
             </td>)}
-            <td><button onClick={() => {deleteVote(vote.id)}}>✖</button></td>
+            <td className="vote-delete" onClick={() => {deleteVote(vote.id)}}>✖</td>
           </tr>)}
           <tr>
-            <td></td>
-            {candidates.map(candidate => <td key={candidate}></td>)}
-            <td><button onClick={addVote} style={{ fontSize: 18 }}><b>+</b></button></td>
+            <td colSpan={2+candidates.length}><button onClick={addVote} style={{ fontSize: 18 }}><b>+</b></button></td>
           </tr>
           </tbody>
         </table>
