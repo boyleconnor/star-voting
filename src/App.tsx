@@ -143,9 +143,9 @@ function App() {
             <th onClick={addCandidate} className="candidate-add" style={{ fontSize: "18px" }}>+</th>
           </tr>
           <tr>
-            <th></th>
-            <th>ID</th>
-            {candidates.map(candidate => <th className="candidate" key={candidate}>{candidate}</th>)}
+            <td></td>
+            <th>Ballot No.</th>
+            {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
             <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {if (e.key == 'Enter') {addCandidate()}}} /></th>
           </tr>
           </thead>
@@ -195,7 +195,7 @@ function App() {
       {(topCandidates.length == 2 && <>
         <table>
           <thead><tr>
-            <th>ID</th>
+            <th>Ballot No.</th>
             <th>{firstCandidate}</th>
             <th>{secondCandidate}</th>
             <th>Preference</th>
