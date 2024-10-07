@@ -138,25 +138,32 @@ function App() {
         <table className="ballots">
           <thead>
           <tr>
-            <th></th>
+            <th colSpan={2}></th>
             {candidates.map(candidate => <th key={candidate} className="candidate-delete" onClick={() => deleteCandidate(candidate)}>✖</th>)}
           </tr>
           <tr>
+            <th></th>
             <th>ID</th>
             {candidates.map(candidate => <th className="candidate" key={candidate}>{candidate}</th>)}
-            <th></th>
           </tr>
           </thead>
           <tbody>
           {votes.map(vote => <tr className="ballot" key={vote.id}>
-            <td className="ballot">{vote.id}</td>
+            <td className="vote-delete" onClick={() => {
+              deleteVote(vote.id)
+            }}>✖
+            </td>
+            <td>{vote.id}</td>
             {candidates.map(candidate => <td className="ballot" key={candidate}>
-              <input className="score" style={{ backgroundColor: getColor(vote.scores.get(candidate) as number)}} type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {setScore(vote.id, candidate, parseInt(e.target.value))}} />
+              <input className="score" style={{ backgroundColor: getColor(vote.scores.get(candidate) as number) }}
+                     type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {
+                setScore(vote.id, candidate, parseInt(e.target.value))
+              }}/>
             </td>)}
-            <td className="vote-delete" onClick={() => {deleteVote(vote.id)}}>✖</td>
           </tr>)}
           <tr>
-            <td colSpan={2+candidates.length} className="vote-add" onClick={addVote} style={{ fontSize: 18 }}><b>+</b></td>
+            <td colSpan={2} />
+            <td colSpan={candidates.length} className="vote-add" onClick={addVote} style={{ fontSize: 18 }}><b>+</b></td>
           </tr>
           </tbody>
         </table>

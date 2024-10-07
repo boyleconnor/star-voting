@@ -87,6 +87,7 @@ th.candidate-delete:hover {
 input.score {
   width: 100%;
   height: 40px;
+  padding: 0;
   margin: 0;
   border: none;
   outline: none;
