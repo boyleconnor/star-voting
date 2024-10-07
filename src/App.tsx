@@ -140,11 +140,13 @@ function App() {
           <tr>
             <th colSpan={2}></th>
             {candidates.map(candidate => <th key={candidate} className="candidate-delete" onClick={() => deleteCandidate(candidate)}>✖</th>)}
+            <th onClick={addCandidate} className="candidate-add" style={{ fontSize: "18px" }}>+</th>
           </tr>
           <tr>
             <th></th>
             <th>ID</th>
             {candidates.map(candidate => <th className="candidate" key={candidate}>{candidate}</th>)}
+            <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {if (e.key == 'Enter') {addCandidate()}}} /></th>
           </tr>
           </thead>
           <tbody>
@@ -160,6 +162,7 @@ function App() {
                 setScore(vote.id, candidate, parseInt(e.target.value))
               }}/>
             </td>)}
+            <td></td>
           </tr>)}
           <tr>
             <td colSpan={2} />
@@ -168,8 +171,6 @@ function App() {
           </tbody>
         </table>
       </div>
-      <input type="text" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)}></input>
-      <button onClick={addCandidate}>Add candidate</button>
 
       <h2>Score round</h2>
       {topCandidates.length == 2 && (<p>
