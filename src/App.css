@@ -41,6 +41,10 @@
   color: #888;
 }
 
+h2 {
+  margin-top: 50px;
+}
+
 p {
   text-align: left;
   text-indent: 5%;
