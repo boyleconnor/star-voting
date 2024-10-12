@@ -63,11 +63,13 @@ function App() {
     setNewCandidate("");
   }
 
-  const setScore = (id: number, candidate: string, score: number) => {
+  const setScore = (id: number, candidate: string, rawScore: number) => {
+    // FIXME: This leads to some weird behavior in the UI (if you type another digit after an existing one, it jumps to 5)
+    const sanitizedScore = Math.max(Math.min(rawScore, MAX_SCORE), MIN_SCORE);
     const newVotes = votes.map(vote => {
       if (vote.id == id) {
         const newScores = new Map(vote.scores.entries());
-        newScores.set(candidate, score);
+        newScores.set(candidate, sanitizedScore);
         return {id: vote.id, scores: newScores};
       } else {
         return {id: vote.id, scores: vote.scores};
