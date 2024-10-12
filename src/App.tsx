@@ -213,26 +213,13 @@ function App() {
           </tr>)}
           </tbody>
         </table>
-        <table>
-        <thead>
-          <tr>
-            <th colSpan={3}>How many voters prefer:</th>
-          </tr>
-          <tr>
-            <th>{firstCandidate}</th>
-            <th><i>neither</i></th>
-            <th>{secondCandidate}</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>{preferences.prefersFirst}</td>
-            <td>{preferences.noPreference}</td>
-            <td>{preferences.prefersSecond}</td>
-          </tr>
-          </tbody>
-        </table>
-        <p>Winner: {winner !== null ? winner: <i>Tie</i>}</p>
+
+        <ul style={{ alignSelf: "center"}}>
+          <li><b>{preferences.noPreference}</b> voter(s) expressed <b>no preference</b> between these two candidates.</li>
+          <li><b>{preferences.prefersFirst}</b> voter(s) prefer <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b> over <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b></li>
+          <li><b>{preferences.prefersSecond}</b> voter(s) prefer <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b> over <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b></li>
+        </ul>
+        Therefore, the winner is <b style={{backgroundColor: winner === firstCandidate ? FIRST_CAN_BG_COLOR : (winner === secondCandidate ? SECOND_CAN_BG_COLOR : "inherit")}}>{winner !== null ? winner: <i>tie</i>}</b>
       </>) || <>
         <i>Breaking ties in the scoring round is not yet supported in this app.</i>
       </>}
