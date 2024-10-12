@@ -138,9 +138,9 @@ function App() {
           <thead>
           <tr>
             <th colSpan={2}></th>
-            {candidates.map(candidate => <th key={candidate} className="candidate-delete"
+            {candidates.map(candidate => <th key={candidate} className="candidate-delete cell-button"
                                              onClick={() => deleteCandidate(candidate)}>✖</th>)}
-            <th onClick={addCandidate} className="candidate-add" style={{fontSize: "18px"}}>+</th>
+            <th onClick={addCandidate} className="candidate-add cell-button" style={{fontSize: "18px"}}>+</th>
           </tr>
           <tr>
             <td></td>
@@ -156,7 +156,7 @@ function App() {
           </thead>
           <tbody>
           {votes.map(vote => <tr className="ballot" key={vote.id}>
-            <td className="vote-delete" onClick={() => {
+            <td className="vote-delete cell-button" onClick={() => {
               deleteVote(vote.id)
             }}>✖
             </td>
@@ -171,7 +171,7 @@ function App() {
           </tr>)}
           <tr>
             <td colSpan={2}/>
-            <td colSpan={candidates.length} className="vote-add" onClick={addVote} style={{fontSize: 18}}><b>+</b></td>
+            <td colSpan={candidates.length} className="vote-add cell-button" onClick={addVote} style={{fontSize: 18}}><b>+</b></td>
           </tr>
           </tbody>
         </table>
