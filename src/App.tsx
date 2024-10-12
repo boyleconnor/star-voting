@@ -119,34 +119,37 @@ function App() {
     <>
       <h1>STAR Voting</h1>
       <div className="card">
+        <h2>Introduction</h2>
+        <p>
+          In an election using the <a href="https://www.starvoting.org/">STAR voting</a> system, each voter assigns a
+          score to every candidate (customarily, on the inclusive range of zero to five). The winner of the election
+          will be decided based on a combination of the summed total scores that each candidate wins, as well as each
+          voter's implicit preferences between the top-scoring candidates, which can be inferred by their relative
+          scoring of the candidates.
+        </p>
+        <p>
+          Below is a STAR election simulator. Try changing or adding ballots & candidates to see how it affects the
+          election result!
+        </p>
         <h2>Ballots</h2>
-        <p>
-          In a STAR election, each voter assigns a score to every candidate (customarily, on the inclusive range of zero
-          to five). The winner of the election will be decided based on a combination of the summed total scores that
-          each candidate wins, as well as each voter's implicit preferences between the top-scoring candidates, which
-          can be inferred by their relative scoring of the candidates.
-        </p>
-        <p>
-          Voters can assign any score within the allowed range to any number of candidates; voters can even assign
-          the same score (e.g. 0 or 3) to every candidate; however, this would be pointless and equivalent to not
-          voting.
-        </p>
-        <p>
-          Voters are rewarded for giving their most-preferred candidates high scores and giving their least-preferred
-          candidates low scores.
-        </p>
         <table className="ballots">
           <thead>
           <tr>
             <th colSpan={2}></th>
-            {candidates.map(candidate => <th key={candidate} className="candidate-delete" onClick={() => deleteCandidate(candidate)}>✖</th>)}
-            <th onClick={addCandidate} className="candidate-add" style={{ fontSize: "18px" }}>+</th>
+            {candidates.map(candidate => <th key={candidate} className="candidate-delete"
+                                             onClick={() => deleteCandidate(candidate)}>✖</th>)}
+            <th onClick={addCandidate} className="candidate-add" style={{fontSize: "18px"}}>+</th>
           </tr>
           <tr>
             <td></td>
             <th>Ballot No.</th>
             {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
-            <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate} onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {if (e.key == 'Enter') {addCandidate()}}} /></th>
+            <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate}
+                       onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {
+              if (e.key == 'Enter') {
+                addCandidate()
+              }
+            }}/></th>
           </tr>
           </thead>
           <tbody>
@@ -157,7 +160,7 @@ function App() {
             </td>
             <td>{vote.id}</td>
             {candidates.map(candidate => <td className="ballot" key={candidate}>
-              <input className="score" style={{ backgroundColor: getColor(vote.scores.get(candidate) as number) }}
+              <input className="score" style={{backgroundColor: getColor(vote.scores.get(candidate) as number)}}
                      type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {
                 setScore(vote.id, candidate, parseInt(e.target.value))
               }}/>
@@ -165,8 +168,8 @@ function App() {
             <td></td>
           </tr>)}
           <tr>
-            <td colSpan={2} />
-            <td colSpan={candidates.length} className="vote-add" onClick={addVote} style={{ fontSize: 18 }}><b>+</b></td>
+            <td colSpan={2}/>
+            <td colSpan={candidates.length} className="vote-add" onClick={addVote} style={{fontSize: 18}}><b>+</b></td>
           </tr>
           </tbody>
         </table>
@@ -175,17 +178,20 @@ function App() {
       <h2>Score round</h2>
       {topCandidates.length == 2 && (<p>
         <b>{firstCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>)
-        and <b>{secondCandidate}</b> (score: <b>{totalScores.get(secondCandidate)}</b>) received the two highest total scores.
+        and <b>{secondCandidate}</b> (score: <b>{totalScores.get(secondCandidate)}</b>) received the two highest total
+        scores.
         The winner will be decided by voters' preferences between these candidates.
       </p>)}
       <table>
-        <thead><tr>
+        <thead>
+        <tr>
           <th>Candidate</th>
           <th>Total score</th>
-        </tr></thead>
+        </tr>
+        </thead>
         <tbody>
-          {sortedScores.map(([candidate, score]) => <tr>
-            <td style={{backgroundColor: (candidate == firstCandidate && FIRST_CAN_BG_COLOR) || (candidate == secondCandidate && SECOND_CAN_BG_COLOR) || "gray"}}>{candidate}</td>
+        {sortedScores.map(([candidate, score]) => <tr>
+          <td style={{backgroundColor: (candidate == firstCandidate && FIRST_CAN_BG_COLOR) || (candidate == secondCandidate && SECOND_CAN_BG_COLOR) || "gray"}}>{candidate}</td>
             <td>{score}</td>
           </tr>)}
         </tbody>
