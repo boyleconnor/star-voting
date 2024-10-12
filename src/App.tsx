@@ -126,7 +126,7 @@ function App() {
           In an election using the <a href="https://www.starvoting.org/">STAR voting</a> system, each voter assigns a
           score to every candidate (customarily, on the inclusive range of zero to five). The winner of the election
           will be decided based on a combination of the summed total scores that each candidate wins, as well as each
-          voter's implicit preferences between the top-scoring candidates, which can be inferred by their relative
+          voter's implicit preferences between the top-scoring candidates, which can be inferred from their relative
           scoring of the candidates.
         </p>
         <p>
