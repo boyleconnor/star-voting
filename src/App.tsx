@@ -203,11 +203,11 @@ function App() {
           <tbody>
           {votes.map(vote => <tr>
             <td>{vote.id}</td>
-            <td style={{ backgroundColor: getColor(vote.scores.get(firstCandidate)) }}>{vote.scores.get(firstCandidate)}</td>
-            <td style={{ backgroundColor: getColor(vote.scores.get(secondCandidate)) }}>{vote.scores.get(secondCandidate)}</td>
+            <td style={{ backgroundColor: getColor(vote.scores.get(firstCandidate)!) }}>{vote.scores.get(firstCandidate)}</td>
+            <td style={{ backgroundColor: getColor(vote.scores.get(secondCandidate)!) }}>{vote.scores.get(secondCandidate)}</td>
             {
-              (vote.scores.get(firstCandidate) > vote.scores.get(secondCandidate) && <td style={{ backgroundColor: FIRST_CAN_BG_COLOR }}>{firstCandidate}</td>) ||
-              (vote.scores.get(firstCandidate) < vote.scores.get(secondCandidate) && <td style={{ backgroundColor: SECOND_CAN_BG_COLOR }}>{secondCandidate}</td>) ||
+              (vote.scores.get(firstCandidate)! > vote.scores.get(secondCandidate)! && <td style={{ backgroundColor: FIRST_CAN_BG_COLOR }}>{firstCandidate}</td>) ||
+              (vote.scores.get(firstCandidate)! < vote.scores.get(secondCandidate)! && <td style={{ backgroundColor: SECOND_CAN_BG_COLOR }}>{secondCandidate}</td>) ||
               <td style={{ backgroundColor: "gray"}}><i>neither</i></td>
             }
           </tr>)}
