@@ -69,11 +69,13 @@ td.vote-delete {
 td.vote-delete:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 td.vote-add:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 th {
@@ -83,11 +85,13 @@ th {
 th.candidate-delete:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 th.candidate-add:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 ul {
