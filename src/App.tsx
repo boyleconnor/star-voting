@@ -198,7 +198,7 @@ function App() {
         </tbody>
       </table>
 
-      <h2>Run-off Round</h2>
+      <h2>Runoff Round</h2>
       {(topCandidates.length == 2 && <>
         <table>
           <thead><tr>
