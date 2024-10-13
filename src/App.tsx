@@ -120,62 +120,61 @@ function App() {
   return (
     <>
       <h1>STAR Voting</h1>
-      <div className="card">
-        <h2>Introduction</h2>
-        <p>
-          In an election using the <a href="https://www.starvoting.org/">STAR voting</a> system, each voter assigns a
-          score to every candidate (customarily, on the inclusive range of zero to five). The winner of the election
-          will be decided based on a combination of the summed total scores that each candidate wins, as well as each
-          voter's implicit preferences between the top-scoring candidates, which can be inferred from their relative
-          scoring of the candidates.
-        </p>
-        <p>
-          Below is a STAR election simulator. Try changing or adding ballots & candidates to see how it affects the
-          election result!
-        </p>
-        <h2>Ballots</h2>
-        <table className="ballots">
-          <thead>
-          <tr>
-            <th colSpan={2}></th>
-            {candidates.map(candidate => <th key={candidate} className="candidate-delete cell-button"
-                                             onClick={() => deleteCandidate(candidate)}>✖</th>)}
-            <th onClick={addCandidate} className="candidate-add cell-button" style={{fontSize: "18px"}}>+</th>
-          </tr>
-          <tr>
-            <td></td>
-            <th>Ballot No.</th>
-            {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
-            <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate}
-                       onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {
-              if (e.key == 'Enter') {
-                addCandidate()
-              }
-            }}/></th>
-          </tr>
-          </thead>
-          <tbody>
-          {votes.map(vote => <tr className="ballot" key={vote.id}>
-            <td className="vote-delete cell-button" onClick={() => {
-              deleteVote(vote.id)
-            }}>✖
-            </td>
-            <td>{vote.id}</td>
-            {candidates.map(candidate => <td className="ballot" key={candidate}>
-              <input className="score" style={{backgroundColor: getColor(vote.scores.get(candidate) as number)}}
-                     type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {
-                setScore(vote.id, candidate, parseInt(e.target.value))
-              }}/>
-            </td>)}
-            <td></td>
-          </tr>)}
-          <tr>
-            <td colSpan={2}/>
-            <td colSpan={candidates.length} className="vote-add cell-button" onClick={addVote} style={{fontSize: 18}}><b>+</b></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+
+      <h2>Introduction</h2>
+      <p>
+        In an election using the <a href="https://www.starvoting.org/">STAR voting</a> system, each voter assigns a
+        score to every candidate (customarily, on the inclusive range of zero to five). The winner of the election
+        will be decided based on a combination of the summed total scores that each candidate wins, as well as each
+        voter's implicit preferences between the top-scoring candidates, which can be inferred from their relative
+        scoring of the candidates.
+      </p>
+      <p>
+        Below is a STAR election simulator. Try changing or adding ballots & candidates to see how it affects the
+        election result!
+      </p>
+      <h2>Ballots</h2>
+      <table className="ballots">
+        <thead>
+        <tr>
+          <th colSpan={2}></th>
+          {candidates.map(candidate => <th key={candidate} className="candidate-delete cell-button"
+                                           onClick={() => deleteCandidate(candidate)}>✖</th>)}
+          <th onClick={addCandidate} className="candidate-add cell-button" style={{fontSize: "18px"}}>+</th>
+        </tr>
+        <tr>
+          <td></td>
+          <th>Ballot No.</th>
+          {candidates.map(candidate => <th key={candidate}>{candidate}</th>)}
+          <th><input type="text" placeholder="candidate" className="candidate candidate-input" value={newCandidate}
+                     onChange={(e) => setNewCandidate(e.target.value)} onKeyDown={e => {
+            if (e.key == 'Enter') {
+              addCandidate()
+            }
+          }}/></th>
+        </tr>
+        </thead>
+        <tbody>
+        {votes.map(vote => <tr className="ballot" key={vote.id}>
+          <td className="vote-delete cell-button" onClick={() => {
+            deleteVote(vote.id)
+          }}>✖
+          </td>
+          <td>{vote.id}</td>
+          {candidates.map(candidate => <td className="ballot" key={candidate}>
+            <input className="score" style={{backgroundColor: getColor(vote.scores.get(candidate) as number)}}
+                   type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {
+              setScore(vote.id, candidate, parseInt(e.target.value))
+            }}/>
+          </td>)}
+          <td></td>
+        </tr>)}
+        <tr>
+          <td colSpan={2}/>
+          <td colSpan={candidates.length} className="vote-add cell-button" onClick={addVote} style={{fontSize: 18}}><b>+</b></td>
+        </tr>
+        </tbody>
+      </table>
 
       <h2>Score round</h2>
       {topCandidates.length == 2 && (<p>
