@@ -176,7 +176,7 @@ function App() {
         </tbody>
       </table>
 
-      <h2>Score round</h2>
+      <h2>Score Round</h2>
       {topCandidates.length == 2 && (<p>
         <b>{firstCandidate}</b> (score: <b>{totalScores.get(firstCandidate)}</b>)
         and <b>{secondCandidate}</b> (score: <b>{totalScores.get(secondCandidate)}</b>) received the two highest total
