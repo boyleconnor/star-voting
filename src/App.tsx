@@ -227,9 +227,18 @@ function App() {
           <li><b>{preferences.prefersFirst}</b> voter(s) prefer <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b> over <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b></li>
           <li><b>{preferences.prefersSecond}</b> voter(s) prefer <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b> over <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b></li>
         </ul>
-        Therefore, the winner is <b style={{backgroundColor: winner === firstCandidate ? FIRST_CAN_BG_COLOR : (winner === secondCandidate ? SECOND_CAN_BG_COLOR : "inherit")}}>{winner !== null ? winner: <i>tie</i>}</b>
+
+        <br/>
+        <br/>
+        {winner !== null &&
+          <h1>Winner: <span
+            style={{backgroundColor: winner === firstCandidate ? FIRST_CAN_BG_COLOR : SECOND_CAN_BG_COLOR}}>{winner}</span>
+          </h1>
+          || <h1>Tie between <span style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</span> & <span
+            style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</span></h1>
+        }
       </>) || <>
-        <i>Breaking ties in the scoring round is not yet supported in this app.</i>
+      <i>Breaking ties in the scoring round is not yet supported in this app.</i>
       </>}
     </>
   )
