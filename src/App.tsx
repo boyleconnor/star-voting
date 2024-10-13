@@ -222,9 +222,9 @@ function App() {
         </table>
 
         <ul style={{ alignSelf: "center"}}>
-          <li><b>{preferences.noPreference}</b> voter(s) expressed <b>no preference</b> between these two candidates.</li>
-          <li><b>{preferences.prefersFirst}</b> voter(s) prefer <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b> over <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b></li>
-          <li><b>{preferences.prefersSecond}</b> voter(s) prefer <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b> over <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b></li>
+          <li><b>{preferences.noPreference}</b> voter(s) (<i>{(100 * preferences.noPreference / votes.length).toFixed(2)}%</i>) expressed <b>no preference</b> between top candidates</li>
+          <li><b>{preferences.prefersFirst}</b> voter(s) (<i>{(100 * preferences.prefersFirst / votes.length).toFixed(2)}%</i>) prefer <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b> over <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b></li>
+          <li><b>{preferences.prefersSecond}</b> voter(s) (<i>{(100 * preferences.prefersSecond / votes.length).toFixed(2)}%</i>) prefer <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b> over <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b></li>
         </ul>
 
         <br/>
