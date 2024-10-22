@@ -188,7 +188,7 @@ function App() {
         </tr>
         </thead>
         <tbody>
-        {sortedScores.map(([candidate, score]) => <tr>
+        {sortedScores.map(([candidate, score]) => <tr key={candidate}>
           <td className={(candidate == firstCandidate && "first-candidate") || (candidate == secondCandidate && "second-candidate") || ""}>{candidate}</td>
             <td>{score}</td>
           </tr>)}
