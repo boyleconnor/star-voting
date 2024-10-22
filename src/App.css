@@ -33,6 +33,24 @@
   }
 }
 
+.first-candidate {
+  background-color: #36d1e3;
+}
+
+.second-candidate {
+  background-color: #ecdf10;
+}
+
+@media (prefers-color-scheme: dark) {
+  .first-candidate {
+    background-color: #1b6e7c;
+  }
+
+  .second-candidate {
+    background-color: #918a0a;
+  }
+}
+
 .read-the-docs {
   color: #888;
 }

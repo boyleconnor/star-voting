@@ -34,9 +34,6 @@ function getColor(score: number) {
   return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`;
 }
 
-const FIRST_CAN_BG_COLOR = "cyan"; // Color for first place (by score) candidate
-const SECOND_CAN_BG_COLOR = "yellow"; // Color for second place (by score) candidate
-
 function App() {
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [votes, setVotes] = useState(INITIAL_VOTES);
@@ -192,7 +189,7 @@ function App() {
         </thead>
         <tbody>
         {sortedScores.map(([candidate, score]) => <tr>
-          <td style={{backgroundColor: (candidate == firstCandidate && FIRST_CAN_BG_COLOR) || (candidate == secondCandidate && SECOND_CAN_BG_COLOR) || "gray"}}>{candidate}</td>
+          <td className={(candidate == firstCandidate && "first-candidate") || (candidate == secondCandidate && "second-candidate") || ""}>{candidate}</td>
             <td>{score}</td>
           </tr>)}
         </tbody>
@@ -213,8 +210,8 @@ function App() {
             <td style={{ backgroundColor: getColor(vote.scores.get(firstCandidate)!) }}>{vote.scores.get(firstCandidate)}</td>
             <td style={{ backgroundColor: getColor(vote.scores.get(secondCandidate)!) }}>{vote.scores.get(secondCandidate)}</td>
             {
-              (vote.scores.get(firstCandidate)! > vote.scores.get(secondCandidate)! && <td style={{ backgroundColor: FIRST_CAN_BG_COLOR }}>{firstCandidate}</td>) ||
-              (vote.scores.get(firstCandidate)! < vote.scores.get(secondCandidate)! && <td style={{ backgroundColor: SECOND_CAN_BG_COLOR }}>{secondCandidate}</td>) ||
+              (vote.scores.get(firstCandidate)! > vote.scores.get(secondCandidate)! && <td className="first-candidate">{firstCandidate}</td>) ||
+              (vote.scores.get(firstCandidate)! < vote.scores.get(secondCandidate)! && <td className="second-candidate">{secondCandidate}</td>) ||
               <td style={{ backgroundColor: "gray"}}><i>neither</i></td>
             }
           </tr>)}
@@ -223,18 +220,18 @@ function App() {
 
         <ul style={{ alignSelf: "center"}}>
           <li><b>{preferences.noPreference}</b> voter(s) (<i>{(100 * preferences.noPreference / votes.length).toFixed(2)}%</i>) expressed <b>no preference</b> between top candidates</li>
-          <li><b>{preferences.prefersFirst}</b> voter(s) (<i>{(100 * preferences.prefersFirst / votes.length).toFixed(2)}%</i>) prefer <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b> over <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b></li>
-          <li><b>{preferences.prefersSecond}</b> voter(s) (<i>{(100 * preferences.prefersSecond / votes.length).toFixed(2)}%</i>) prefer <b style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</b> over <b style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</b></li>
+          <li><b>{preferences.prefersFirst}</b> voter(s) (<i>{(100 * preferences.prefersFirst / votes.length).toFixed(2)}%</i>) prefer <b className="first-candidate">{firstCandidate}</b> over <b className="second-candidate">{secondCandidate}</b></li>
+          <li><b>{preferences.prefersSecond}</b> voter(s) (<i>{(100 * preferences.prefersSecond / votes.length).toFixed(2)}%</i>) prefer <b className="second-candidate">{secondCandidate}</b> over <b className="first-candidate">{firstCandidate}</b></li>
         </ul>
 
         <br/>
         <br/>
         {winner !== null &&
           <h1>Winner: <span
-            style={{backgroundColor: winner === firstCandidate ? FIRST_CAN_BG_COLOR : SECOND_CAN_BG_COLOR}}>{winner}</span>
+            className={winner === firstCandidate ? "first-candidate" : "second-candidate"}>{winner}</span>
           </h1>
-          || <h1>Tie between <span style={{backgroundColor: FIRST_CAN_BG_COLOR}}>{firstCandidate}</span> & <span
-            style={{backgroundColor: SECOND_CAN_BG_COLOR}}>{secondCandidate}</span></h1>
+          || <h1>Tie between <span className="first-candidate">{firstCandidate}</span> & <span
+            className="second-candidate">{secondCandidate}</span></h1>
         }
       </>) || <>
       <i>Breaking ties in the scoring round is not yet supported in this app.</i>
