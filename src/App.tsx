@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import './App.css'
 import {getPreferences, getScores, getTopScorers, sortScores} from "./star.ts";
+import useLocalStorage from "./local_storage.ts";
 
 
 interface Vote {
@@ -39,8 +40,8 @@ function arraysToMaps(candidates: string[], votes: Vote[]): Map<string, number>[
 }
 
 function App() {
-  const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
-  const [votes, setVotes] = useState(INITIAL_VOTES);
+  const [candidates, setCandidates] = useLocalStorage("candidates", INITIAL_CANDIDATES);
+  const [votes, setVotes] = useLocalStorage("votes", INITIAL_VOTES);
   const [newCandidate, setNewCandidate] = useState("");
   const [nextId, setNextId] = useState(INITIAL_NEXT_ID);
 
