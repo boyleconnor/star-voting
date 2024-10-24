@@ -17,7 +17,6 @@ const INITIAL_VOTES: Vote[] = [
   {id: 5, scores: [5, 3, 1, 0]},
 ];
 const INITIAL_CANDIDATES = ["O'Brien", "Murphy", "Walsh", "Kelly"];
-const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id) => Math.max(previousId, id)) + 1;
 
 // min & max scores (inclusive)
 const MIN_SCORE = 0;
@@ -43,11 +42,13 @@ function App() {
   const [candidates, setCandidates] = useLocalStorage("candidates", INITIAL_CANDIDATES);
   const [votes, setVotes] = useLocalStorage("votes", INITIAL_VOTES);
   const [newCandidate, setNewCandidate] = useState("");
-  const [nextId, setNextId] = useState(INITIAL_NEXT_ID);
+
+  const getNextId = () => {
+    return Math.max(...votes.map(vote => vote.id))+1;
+  }
 
   const addVote = () => {
-    setVotes(votes.concat({id: nextId, scores: Array.from(candidates.map(() => 0))}));
-    setNextId(nextId + 1);
+    setVotes(votes.concat({id: getNextId(), scores: Array.from(candidates.map(() => 0))}));
   }
 
   const addCandidate = () => {
