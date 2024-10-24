@@ -5,17 +5,17 @@ import {getPreferences, getScores, getTopScorers, sortScores} from "./star.ts";
 
 interface Vote {
   id: number;
-  scores: Map<string, number>;
+  scores: number[];
 }
 
 const INITIAL_VOTES: Vote[] = [
-  {id: 1, scores: new Map([["O'Brien", 5], ["Murphy", 4], ["Walsh", 0], ["Kelly", 1]])},
-  {id: 2, scores: new Map([["O'Brien", 5], ["Murphy", 2], ["Walsh", 1], ["Kelly", 0]])},
-  {id: 3, scores: new Map([["O'Brien", 0], ["Murphy", 0], ["Walsh", 5], ["Kelly", 2]])},
-  {id: 4, scores: new Map([["O'Brien", 2], ["Murphy", 5], ["Walsh", 2], ["Kelly", 0]])},
-  {id: 5, scores: new Map([["O'Brien", 5], ["Murphy", 3], ["Walsh", 1], ["Kelly", 0]])},
+  {id: 1, scores: [5, 4, 0, 1]},
+  {id: 2, scores: [5, 2, 1, 0]},
+  {id: 3, scores: [0, 0, 5, 2]},
+  {id: 4, scores: [2, 5, 2, 0]},
+  {id: 5, scores: [5, 3, 1, 0]},
 ];
-const INITIAL_CANDIDATES = Array.from(INITIAL_VOTES[0].scores.keys());
+const INITIAL_CANDIDATES = ["O'Brien", "Murphy", "Walsh", "Kelly"];
 const INITIAL_NEXT_ID = INITIAL_VOTES.map(vote => vote.id).reduce((previousId, id) => Math.max(previousId, id)) + 1;
 
 // min & max scores (inclusive)
@@ -34,6 +34,10 @@ function getColor(score: number) {
   return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`;
 }
 
+function arraysToMaps(candidates: string[], votes: Vote[]): Map<string, number>[] {
+  return votes.map(vote => new Map(candidates.map((candidate, i) => [candidate, vote.scores[i]])));
+}
+
 function App() {
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [votes, setVotes] = useState(INITIAL_VOTES);
@@ -41,7 +45,7 @@ function App() {
   const [nextId, setNextId] = useState(INITIAL_NEXT_ID);
 
   const addVote = () => {
-    setVotes(votes.concat({id: nextId, scores: new Map(candidates.map(candidate => [candidate, 0]))}));
+    setVotes(votes.concat({id: nextId, scores: Array.from(candidates.map(() => 0))}));
     setNextId(nextId + 1);
   }
 
@@ -51,9 +55,8 @@ function App() {
       return;
     }
     setCandidates(candidates.concat(newCandidate));
-    const newVotes = votes.map(vote => {
-      const newScores = new Map(vote.scores.entries());
-      newScores.set(newCandidate, 0);
+    const newVotes = votes.map((vote: Vote) => {
+      const newScores = [...vote.scores, 0];
       return {id: vote.id, scores: newScores};
     })
     setVotes(newVotes);
@@ -63,10 +66,10 @@ function App() {
   const setScore = (id: number, candidate: string, rawScore: number) => {
     // FIXME: This leads to some weird behavior in the UI (if you type another digit after an existing one, it jumps to 5)
     const sanitizedScore = Math.max(Math.min(rawScore, MAX_SCORE), MIN_SCORE);
+    const candidateIndex = candidates.findIndex(value => value === candidate);
     const newVotes = votes.map(vote => {
       if (vote.id == id) {
-        const newScores = new Map(vote.scores.entries());
-        newScores.set(candidate, sanitizedScore);
+        const newScores = [...vote.scores.slice(0, candidateIndex), sanitizedScore, ...vote.scores.slice(candidateIndex + 1)];
         return {id: vote.id, scores: newScores};
       } else {
         return {id: vote.id, scores: vote.scores};
@@ -81,28 +84,26 @@ function App() {
   }
 
   const deleteCandidate = (candidate: string) => {
+    const candidateIndex = candidates.findIndex(value => value === candidate);
     const newVotes = votes
         .map(({id, scores}) => { return {
           id: id,
-          scores: Array.from(scores.entries())};
+          scores: [...scores.slice(0, candidateIndex), ...scores.slice(candidateIndex + 1)],};
         })
-        .map(({id, scores}) => { return {
-          id: id,
-          scores: new Map(scores.filter(([_candidate,]) => _candidate != candidate))
-        };});
     setVotes(newVotes);
 
     const newCandidates = candidates.filter(_candidate => _candidate != candidate);
     setCandidates(newCandidates);
   }
 
-  const totalScores = getScores(votes.map(vote => vote.scores));
+  const totalScores = getScores(arraysToMaps(candidates, votes));
   const sortedScores = sortScores(totalScores);
   const topCandidates = getTopScorers(sortedScores);
 
   // FIXME: We just assume there are no ties and run this on the first two scorers in the sorted list
   const [firstCandidate, secondCandidate] = topCandidates.slice(0, 2)
-  const preferences = getPreferences(firstCandidate, secondCandidate, votes.map(vote => vote.scores));
+  const [firstCandidateIndex, secondCandidateIndex] = [candidates.findIndex(value => value === firstCandidate), candidates.findIndex(value => value === secondCandidate)]
+  const preferences = getPreferences(firstCandidate, secondCandidate, arraysToMaps(candidates, votes));
 
   // FIXME: We should display an explanation/reason for victory or tie
   let winner = null;
@@ -158,9 +159,9 @@ function App() {
           }}>✖
           </td>
           <td>{vote.id}</td>
-          {candidates.map(candidate => <td className="ballot" key={candidate}>
-            <input className="score" style={{backgroundColor: getColor(vote.scores.get(candidate) as number)}}
-                   type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores.get(candidate)} onChange={(e) => {
+          {candidates.map((candidate, candidateIndex) => <td className="ballot" key={candidate}>
+            <input className="score" style={{ backgroundColor: getColor(vote.scores[candidateIndex]) }}
+                   type="number" min={MIN_SCORE} max={MAX_SCORE} value={vote.scores[candidateIndex]} onChange={(e) => {
               setScore(vote.id, candidate, parseInt(e.target.value))
             }}/>
           </td>)}
@@ -207,11 +208,11 @@ function App() {
           <tbody>
           {votes.map(vote => <tr>
             <td>{vote.id}</td>
-            <td style={{ backgroundColor: getColor(vote.scores.get(firstCandidate)!) }}>{vote.scores.get(firstCandidate)}</td>
-            <td style={{ backgroundColor: getColor(vote.scores.get(secondCandidate)!) }}>{vote.scores.get(secondCandidate)}</td>
+            <td style={{ backgroundColor: getColor(vote.scores[firstCandidateIndex]) }}>{vote.scores[firstCandidateIndex]}</td>
+            <td style={{ backgroundColor: getColor(vote.scores[secondCandidateIndex]) }}>{vote.scores[secondCandidateIndex]}</td>
             {
-              (vote.scores.get(firstCandidate)! > vote.scores.get(secondCandidate)! && <td className="first-candidate">{firstCandidate}</td>) ||
-              (vote.scores.get(firstCandidate)! < vote.scores.get(secondCandidate)! && <td className="second-candidate">{secondCandidate}</td>) ||
+              (vote.scores[firstCandidateIndex] > vote.scores[secondCandidateIndex] && <td className="first-candidate">{firstCandidate}</td>) ||
+              (vote.scores[firstCandidateIndex] < vote.scores[secondCandidateIndex] && <td className="second-candidate">{secondCandidate}</td>) ||
               <td style={{ backgroundColor: "gray"}}><i>neither</i></td>
             }
           </tr>)}
