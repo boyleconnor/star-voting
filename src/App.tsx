@@ -15,16 +15,6 @@ const INITIAL_VOTES: Vote[] = [
 ]
 const INITIAL_CANDIDATES = ["O'Brien", "Murphy", "Walsh", "Kelly"]
 
-function arraysToMaps(
-  candidates: string[],
-  votes: Vote[]
-): Map<string, number>[] {
-  return votes.map(
-    (vote) =>
-      new Map(candidates.map((candidate, i) => [candidate, vote.scores[i]]))
-  )
-}
-
 function App() {
   const [candidates, setCandidates] = useLocalStorage(
     "candidates",
@@ -103,7 +93,7 @@ function App() {
     setCandidates(newCandidates)
   }
 
-  const totalScores = getScores(arraysToMaps(candidates, votes))
+  const totalScores = getScores({candidates, votes})
   const sortedScores = sortScores(totalScores)
   const topCandidates = getTopScorers(sortedScores)
 
@@ -116,7 +106,7 @@ function App() {
   const preferences = getPreferences(
     firstCandidate,
     secondCandidate,
-    arraysToMaps(candidates, votes)
+    {candidates, votes}
   )
 
   // FIXME: We should display an explanation/reason for victory or tie

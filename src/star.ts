@@ -1,16 +1,18 @@
-export function getScores(votes: Map<string, number>[]) {
-  const scores = new Map<string, number>()
-  for (const vote of votes) {
-    for (const candidate of vote.keys()) {
-      const score = vote.get(candidate)
-      if (!scores.has(candidate)) {
-        scores.set(candidate, <number>score)
+import {Election} from "./models.ts";
+
+export function getScores(election: Election) {
+  const totalScores = new Map<string, number>()
+  for (const vote of election.votes) {
+    for (const [candidateIndex, candidate] of election.candidates.entries()) {
+      const score = vote.scores[candidateIndex];
+      if (!totalScores.has(candidate)) {
+        totalScores.set(candidate, <number>score)
       } else {
-        scores.set(candidate, <number>scores.get(candidate) + <number>score)
+        totalScores.set(candidate, <number>totalScores.get(candidate) + <number>score)
       }
     }
   }
-  return scores
+  return totalScores
 }
 
 export function sortScores(scores: Map<string, number>) {
@@ -41,19 +43,19 @@ export function getTopScorers(sortedScores: [string, number][]): string[] {
 export function getPreferences(
   firstCandidate: string,
   secondCandidate: string,
-  votes: Map<string, number>[]
+  election: Election
 ) {
+  const [firstCandidateIndex, secondCandidateIndex] = [firstCandidate, secondCandidate].map((topCandidate) => election.candidates.findIndex((candidate) => candidate === topCandidate))
   let [prefersFirst, prefersSecond] = [0, 0]
-  for (const vote of votes) {
-    const firstScore = <number>vote.get(<string>firstCandidate)
-    const secondScore = <number>vote.get(<string>secondCandidate)
+  for (const vote of election.votes) {
+    const [firstScore, secondScore] = [vote.scores[firstCandidateIndex], vote.scores[secondCandidateIndex]];
     if (firstScore > secondScore) {
       prefersFirst++
     } else if (firstScore < secondScore) {
       prefersSecond++
     }
   }
-  const noPreference = votes.length - (prefersFirst + prefersSecond)
+  const noPreference = election.votes.length - (prefersFirst + prefersSecond)
 
   console.log(`Preferences:`)
   for (const [candidate, prefersCount] of [
@@ -67,28 +69,4 @@ export function getPreferences(
   )
 
   return { prefersFirst, prefersSecond, noPreference }
-}
-
-export function getSTARWinner(votes: Map<string, number>[]) {
-  const scores = getScores(votes)
-
-  console.log("Candidate scores:")
-  for (const candidate of scores.keys()) {
-    console.log(`${candidate}: ${scores.get(candidate)}`)
-  }
-  console.log("\n")
-
-  // Find the top two candidates
-  const sortedScores: [string, number][] = sortScores(scores)
-  const topCandidates = getTopScorers(sortedScores)
-
-  // FIXME: figure out what to do in the case of score ties
-  if (topCandidates.length > 2) {
-    throw new Error(
-      `Logic not yet implemented for more than 2 top candidates: ${topCandidates.length}`
-    )
-  }
-  const [firstCandidate, secondCandidate] = topCandidates
-  const preferences = getPreferences(firstCandidate, secondCandidate, votes)
-  console.log(preferences)
 }
