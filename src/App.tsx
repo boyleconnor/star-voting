@@ -3,11 +3,9 @@ import "./App.css"
 import { getPreferences, getScores, getTopScorers, sortScores } from "./star.ts"
 import useLocalStorage from "./local_storage.ts"
 import { ScoreRound } from "./ScoreRound.tsx"
-
-interface Vote {
-  id: number
-  scores: number[]
-}
+import { Vote } from "./models.ts"
+import { getColor } from "./score_utils.ts"
+import { MIN_SCORE, MAX_SCORE } from "./score_utils.ts"
 
 const INITIAL_VOTES: Vote[] = [
   { id: 1, scores: [5, 4, 0, 1] },
@@ -17,23 +15,6 @@ const INITIAL_VOTES: Vote[] = [
   { id: 5, scores: [5, 3, 1, 0] },
 ]
 const INITIAL_CANDIDATES = ["O'Brien", "Murphy", "Walsh", "Kelly"]
-
-// min & max scores (inclusive)
-const MIN_SCORE = 0
-const MAX_SCORE = 5
-
-const GRADIENT_LEFT = [0xff, 0x00, 0x00]
-const GRADIENT_RIGHT = [0x00, 0xff, 0x00]
-
-function getColor(score: number) {
-  const progress = (score - MIN_SCORE) / (MAX_SCORE - MIN_SCORE)
-  const colorCodes = GRADIENT_LEFT.map((code, i) => {
-    return (
-      Math.ceil((1 - progress) * code) + Math.ceil(progress * GRADIENT_RIGHT[i])
-    )
-  })
-  return `#${colorCodes[0].toString(16).padStart(2, "0")}${colorCodes[1].toString(16).padStart(2, "0")}${colorCodes[2].toString(16).padStart(2, "0")}`
-}
 
 function arraysToMaps(
   candidates: string[],
