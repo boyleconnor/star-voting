@@ -2,6 +2,7 @@ import { useState } from "react"
 import "./App.css"
 import { getPreferences, getScores, getTopScorers, sortScores } from "./star.ts"
 import useLocalStorage from "./local_storage.ts"
+import { ScoreRound } from "./ScoreRound.tsx"
 
 interface Vote {
   id: number
@@ -259,39 +260,7 @@ function App() {
       </table>
 
       <h2>Score Round</h2>
-      {topCandidates.length == 2 && (
-        <p>
-          <b>{firstCandidate}</b> (score:{" "}
-          <b>{totalScores.get(firstCandidate)}</b>) and <b>{secondCandidate}</b>{" "}
-          (score: <b>{totalScores.get(secondCandidate)}</b>) received the two
-          highest total scores. The winner will be decided by voters'
-          preferences between these candidates.
-        </p>
-      )}
-      <table>
-        <thead>
-          <tr>
-            <th>Candidate</th>
-            <th>Total score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedScores.map(([candidate, score]) => (
-            <tr key={candidate}>
-              <td
-                className={
-                  (candidate == firstCandidate && "first-candidate") ||
-                  (candidate == secondCandidate && "second-candidate") ||
-                  ""
-                }
-              >
-                {candidate}
-              </td>
-              <td>{score}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ScoreRound sortedScores={sortedScores} />
 
       <h2>Runoff Round</h2>
       {(topCandidates.length == 2 && (
